@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Best Dresser Vote · LELP</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="logo.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #DD3928; --red-dark: #C22E1F; --gold: #E9C46A; --gold-soft: #F6E7BF;
+    --bg: #14110F; --card: #201B18; --line: #3A322C; --ink: #F7F2EE; --muted: #B5A99F;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    min-height: 100dvh; background: var(--bg); color: var(--ink);
+    font-family: "Noto Sans KR", -apple-system, system-ui, sans-serif;
+    -webkit-tap-highlight-color: transparent;
+    background-image: radial-gradient(120% 60% at 50% -10%, rgba(233,196,106,.16), transparent 60%);
+  }
+  .wrap { max-width: 520px; margin: 0 auto; padding: 28px 16px calc(120px + env(safe-area-inset-bottom)); }
+  header { text-align: center; margin-bottom: 22px; }
+  .logo { height: 34px; border-radius: 6px; }
+  .eyebrow { margin: 16px 0 4px; font-size: 12px; letter-spacing: .22em; text-transform: uppercase; color: var(--gold); font-weight: 700; }
+  h1 { font-family: "Playfair Display", serif; font-size: 34px; line-height: 1.1; margin: 0; }
+  h1 em { color: var(--gold); }
+  .sub { color: var(--muted); font-size: 15px; margin: 10px 0 0; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(64px, 1fr)); gap: 10px; margin-top: 22px; }
+  .num {
+    aspect-ratio: 1; border-radius: 14px; border: 1.5px solid var(--line); background: var(--card);
+    color: var(--ink); font: 700 22px/1 "Noto Sans KR", sans-serif; cursor: pointer;
+    transition: transform .12s, background .15s, border-color .15s;
+  }
+  .num:active { transform: scale(.94); }
+  .num[aria-pressed="true"] { background: var(--gold); border-color: var(--gold); color: #1d160f; box-shadow: 0 6px 22px rgba(233,196,106,.35); }
+
+  .bar {
+    position: fixed; left: 0; right: 0; bottom: 0; padding: 14px 16px calc(14px + env(safe-area-inset-bottom));
+    background: linear-gradient(to top, var(--bg) 70%, transparent);
+  }
+  .bar-inner { max-width: 520px; margin: 0 auto; }
+  .btn {
+    width: 100%; border: 0; border-radius: 14px; padding: 17px; font: 700 17px "Noto Sans KR", sans-serif;
+    background: var(--red); color: #fff; cursor: pointer;
+  }
+  .btn:disabled { background: #4a3f38; color: #8f847b; cursor: default; }
+  .btn:not(:disabled):active { background: var(--red-dark); }
+
+  .panel { text-align: center; padding: 48px 8px; }
+  .panel .big { font-size: 56px; margin-bottom: 8px; }
+  .panel h2 { font-family: "Playfair Display", serif; font-size: 28px; margin: 0 0 10px; }
+  .panel p { color: var(--muted); margin: 0; font-size: 15px; line-height: 1.6; }
+  .chip { display: inline-block; margin-top: 18px; padding: 10px 22px; border-radius: 999px; background: var(--gold); color: #1d160f; font-weight: 800; font-size: 20px; }
+  .err { color: #ff8f80; text-align: center; font-size: 14px; min-height: 20px; margin: 10px 0 0; }
+  .spinner { width: 34px; height: 34px; border: 3px solid var(--line); border-top-color: var(--gold); border-radius: 50%; margin: 0 auto 18px; animation: spin 1s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  dialog { border: 0; border-radius: 20px; padding: 26px 20px 20px; width: min(92vw, 380px); background: var(--card); color: var(--ink); text-align: center; }
+  dialog::backdrop { background: rgba(0,0,0,.65); }
+  dialog h3 { margin: 0 0 6px; font-size: 18px; }
+  dialog .pick { font-family: "Playfair Display", serif; font-size: 46px; color: var(--gold); margin: 6px 0 4px; }
+  dialog p { color: var(--muted); font-size: 14px; margin: 0 0 18px; }
+  .row { display: flex; gap: 10px; }
+  .btn.ghost { background: transparent; border: 1.5px solid var(--line); color: var(--ink); }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <img class="logo" src="logo.png" alt="LiNK">
+    <p class="eyebrow">LELP Graduation</p>
+    <h1>Best Dresser <em>Pair</em></h1>
+  </header>
+
+  <!-- loading / waiting -->
+  <section class="panel" id="v-wait">
+    <div class="spinner"></div>
+    <h2 id="wait-title">Loading…</h2>
+    <p id="wait-text"></p>
+  </section>
+
+  <!-- voting -->
+  <section id="v-vote" hidden>
+    <p class="sub" style="text-align:center">Tap the number of the pair you think dressed best, then submit. You can vote once.</p>
+    <div class="grid" id="grid" role="group" aria-label="Pair numbers"></div>
+    <p class="err" id="err"></p>
+  </section>
+
+  <!-- voted -->
+  <section class="panel" id="v-done" hidden>
+    <div class="big">✨</div>
+    <h2>Thanks for voting!</h2>
+    <p>Your vote is in. Keep your eyes on the main screen — the winner will be revealed when voting closes.</p>
+    <span class="chip" id="done-num"></span>
+  </section>
+
+  <!-- closed -->
+  <section class="panel" id="v-closed" hidden>
+    <div class="big">🏆</div>
+    <h2>Voting is closed</h2>
+    <p>Look up at the main screen for the big reveal!</p>
+  </section>
+</div>
+
+<div class="bar" id="bar" hidden>
+  <div class="bar-inner"><button class="btn" id="submit" disabled>Select a pair</button></div>
+</div>
+
+<dialog id="confirm">
+  <h3>Vote for this pair?</h3>
+  <div class="pick" id="confirm-num"></div>
+  <p>You can only vote once.</p>
+  <div class="row">
+    <button class="btn ghost" id="cancel">Back</button>
+    <button class="btn" id="ok">Submit vote</button>
+  </div>
+</dialog>
+
+<script>
+(() => {
+  const API = "/api/vote";
+  const $ = (id) => document.getElementById(id);
+  const views = ["v-wait", "v-vote", "v-done", "v-closed"];
+  const store = {
+    get(k) { try { return localStorage.getItem(k); } catch { return null; } },
+    set(k, v) { try { localStorage.setItem(k, v); } catch {} },
+  };
+
+  let voter = store.get("bd-voter");
+  if (!voter) {
+    voter = (crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2, 12)).replace(/[^a-zA-Z0-9-]/g, "");
+    store.set("bd-voter", voter);
+  }
+
+  let state = null, selected = null, builtFor = null, sending = false;
+
+  function show(id) {
+    views.forEach((v) => ($(v).hidden = v !== id));
+    $("bar").hidden = id !== "v-vote";
+  }
+
+  function wait(title, text) {
+    $("wait-title").textContent = title;
+    $("wait-text").textContent = text || "";
+    show("v-wait");
+  }
+
+  function buildGrid() {
+    const g = $("grid");
+    g.innerHTML = "";
+    for (let n = state.min; n <= state.max; n++) {
+      const b = document.createElement("button");
+      b.className = "num";
+      b.textContent = n;
+      b.setAttribute("aria-pressed", "false");
+      b.onclick = () => select(n);
+      g.appendChild(b);
+    }
+    builtFor = state.sid;
+    selected = null;
+    updateSubmit();
+  }
+
+  function select(n) {
+    selected = n;
+    [...$("grid").children].forEach((b) => b.setAttribute("aria-pressed", String(Number(b.textContent) === n)));
+    $("err").textContent = "";
+    updateSubmit();
+  }
+
+  function updateSubmit() {
+    const s = $("submit");
+    s.disabled = selected == null || sending;
+    s.textContent = selected == null ? "Select a pair" : `Vote for Pair #${selected}`;
+  }
+
+  function render() {
+    if (!state || state.status === "idle") return wait("Voting hasn't started yet", "This page will update automatically once voting opens.");
+    if (state.status === "closed") return show("v-closed");
+    // open
+    const mine = store.get("bd-voted-" + state.sid);
+    if (mine) { $("done-num").textContent = mine === "✓" ? "Vote recorded" : "Pair #" + mine; return show("v-done"); }
+    if (builtFor !== state.sid) buildGrid();
+    show("v-vote");
+  }
+
+  async function poll() {
+    try {
+      const r = await fetch(API, { cache: "no-store" });
+      state = await r.json();
+      render();
+    } catch {
+      if (!state) wait("Connecting…", "Check your internet connection.");
+    }
+  }
+
+  $("submit").onclick = () => {
+    if (selected == null) return;
+    $("confirm-num").textContent = "#" + selected;
+    $("confirm").showModal();
+  };
+  $("cancel").onclick = () => $("confirm").close();
+  $("ok").onclick = async () => {
+    $("confirm").close();
+    if (sending) return;
+    sending = true; updateSubmit();
+    try {
+      const r = await fetch(API, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "vote", sid: state.sid, number: selected, voter }),
+      });
+      const d = await r.json();
+      if (r.ok || d.already) {
+        store.set("bd-voted-" + state.sid, d.already ? "✓" : String(selected));
+        render();
+      } else {
+        $("err").textContent = d.error || "Something went wrong. Please try again.";
+        poll();
+      }
+    } catch {
+      $("err").textContent = "Network error. Please try again.";
+    } finally {
+      sending = false; updateSubmit();
+    }
+  };
+
+  poll();
+  setInterval(poll, 3000);
+})();
+</script>
+</body>
+</html>
