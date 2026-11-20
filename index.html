@@ -3,79 +3,97 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Best Dresser Vote · LELP</title>
+<title>Best Dresser Award · LELP Graduation</title>
 <meta name="robots" content="noindex">
-<link rel="icon" href="logo.png" type="image/png">
+<meta name="theme-color" content="#FDFBFA">
+<link rel="icon" href="logo.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800;900&display=swap" rel="stylesheet">
 <style>
   :root {
-    --red: #DD3928; --red-dark: #C22E1F; --gold: #E9C46A; --gold-soft: #F6E7BF;
-    --bg: #14110F; --card: #201B18; --line: #3A322C; --ink: #F7F2EE; --muted: #B5A99F;
+    --red: #DD3928; --red-dark: #C22E1F; --red-tint: #FCEBE8;
+    --ink: #333333; --ink-soft: #5C5C5C; --muted: #8A8580; --line: #E8E2DD;
+    --bg: #FFFFFF; --cream: #FDFBFA;
+    --shadow-pop: 0 8px 20px rgba(221, 57, 40, 0.18);
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; }
   body {
-    min-height: 100dvh; background: var(--bg); color: var(--ink);
+    min-height: 100dvh; background: var(--cream); color: var(--ink);
     font-family: "Noto Sans KR", -apple-system, system-ui, sans-serif;
     -webkit-tap-highlight-color: transparent;
-    background-image: radial-gradient(120% 60% at 50% -10%, rgba(233,196,106,.16), transparent 60%);
   }
+  .top-rule { height: 6px; background: var(--red); }
   .wrap { max-width: 520px; margin: 0 auto; padding: 28px 16px calc(120px + env(safe-area-inset-bottom)); }
-  header { text-align: center; margin-bottom: 22px; }
-  .logo { height: 34px; border-radius: 6px; }
-  .eyebrow { margin: 16px 0 4px; font-size: 12px; letter-spacing: .22em; text-transform: uppercase; color: var(--gold); font-weight: 700; }
-  h1 { font-family: "Playfair Display", serif; font-size: 34px; line-height: 1.1; margin: 0; }
-  h1 em { color: var(--gold); }
-  .sub { color: var(--muted); font-size: 15px; margin: 10px 0 0; }
 
+  header { text-align: center; }
+  .logo { width: 64px; height: 64px; display: block; margin: 0 auto; }
+  .eyebrow { display: inline-flex; align-items: center; gap: 8px; margin: 18px 0 8px; font-size: 12px; letter-spacing: .18em; text-transform: uppercase; color: var(--red); font-weight: 700; }
+  .eyebrow svg { width: 16px; height: 16px; }
+  h1 { font-size: 30px; line-height: 1.15; margin: 0; font-weight: 900; letter-spacing: -.01em; }
+  h1 .accent { color: var(--red); }
+  .divider { display: flex; align-items: center; gap: 10px; justify-content: center; margin: 16px auto 0; color: var(--red); }
+  .divider::before, .divider::after { content: ""; width: 44px; height: 1.5px; background: var(--line); }
+  .divider svg { width: 18px; height: 18px; }
+
+  .intro { text-align: center; color: var(--ink-soft); font-size: 15px; line-height: 1.6; margin: 18px 0 0; }
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(64px, 1fr)); gap: 10px; margin-top: 22px; }
   .num {
-    aspect-ratio: 1; border-radius: 14px; border: 1.5px solid var(--line); background: var(--card);
-    color: var(--ink); font: 700 22px/1 "Noto Sans KR", sans-serif; cursor: pointer;
-    transition: transform .12s, background .15s, border-color .15s;
+    aspect-ratio: 1; border-radius: 12px; border: 1.5px solid var(--line); background: var(--bg);
+    color: var(--ink); font: 800 22px/1 "Noto Sans KR", sans-serif; cursor: pointer;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+    transition: transform .12s, background .15s, border-color .15s, color .15s;
   }
+  .num small { font-size: 10px; font-weight: 700; letter-spacing: .1em; color: var(--muted); text-transform: uppercase; }
   .num:active { transform: scale(.94); }
-  .num[aria-pressed="true"] { background: var(--gold); border-color: var(--gold); color: #1d160f; box-shadow: 0 6px 22px rgba(233,196,106,.35); }
+  .num[aria-pressed="true"] { background: var(--red); border-color: var(--red); color: #fff; box-shadow: var(--shadow-pop); }
+  .num[aria-pressed="true"] small { color: rgba(255,255,255,.8); }
 
   .bar {
     position: fixed; left: 0; right: 0; bottom: 0; padding: 14px 16px calc(14px + env(safe-area-inset-bottom));
-    background: linear-gradient(to top, var(--bg) 70%, transparent);
+    background: linear-gradient(to top, var(--cream) 72%, rgba(253,251,250,0));
   }
   .bar-inner { max-width: 520px; margin: 0 auto; }
   .btn {
-    width: 100%; border: 0; border-radius: 14px; padding: 17px; font: 700 17px "Noto Sans KR", sans-serif;
+    width: 100%; border: 0; border-radius: 12px; padding: 17px; font: 700 17px "Noto Sans KR", sans-serif;
     background: var(--red); color: #fff; cursor: pointer;
   }
-  .btn:disabled { background: #4a3f38; color: #8f847b; cursor: default; }
+  .btn:disabled { background: #E3DDD8; color: #A39C96; cursor: default; }
   .btn:not(:disabled):active { background: var(--red-dark); }
 
-  .panel { text-align: center; padding: 48px 8px; }
-  .panel .big { font-size: 56px; margin-bottom: 8px; }
-  .panel h2 { font-family: "Playfair Display", serif; font-size: 28px; margin: 0 0 10px; }
-  .panel p { color: var(--muted); margin: 0; font-size: 15px; line-height: 1.6; }
-  .chip { display: inline-block; margin-top: 18px; padding: 10px 22px; border-radius: 999px; background: var(--gold); color: #1d160f; font-weight: 800; font-size: 20px; }
-  .err { color: #ff8f80; text-align: center; font-size: 14px; min-height: 20px; margin: 10px 0 0; }
-  .spinner { width: 34px; height: 34px; border: 3px solid var(--line); border-top-color: var(--gold); border-radius: 50%; margin: 0 auto 18px; animation: spin 1s linear infinite; }
+  .panel { text-align: center; margin-top: 28px; padding: 36px 22px; background: var(--bg); border: 1px solid var(--line); border-radius: 14px; }
+  .badge { width: 72px; height: 72px; border-radius: 50%; margin: 0 auto 16px; display: grid; place-items: center; background: var(--red-tint); color: var(--red); }
+  .badge svg { width: 34px; height: 34px; }
+  .panel h2 { font-size: 22px; margin: 0 0 10px; font-weight: 800; }
+  .panel p { color: var(--ink-soft); margin: 0; font-size: 15px; line-height: 1.6; }
+  .chip { display: inline-block; margin-top: 18px; padding: 9px 20px; border-radius: 999px; background: var(--red); color: #fff; font-weight: 800; font-size: 17px; }
+  .err { color: var(--red-dark); text-align: center; font-size: 14px; min-height: 20px; margin: 12px 0 0; }
+  .spinner { width: 34px; height: 34px; border: 3px solid var(--line); border-top-color: var(--red); border-radius: 50%; margin: 0 auto 18px; animation: spin 1s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  dialog { border: 0; border-radius: 20px; padding: 26px 20px 20px; width: min(92vw, 380px); background: var(--card); color: var(--ink); text-align: center; }
-  dialog::backdrop { background: rgba(0,0,0,.65); }
-  dialog h3 { margin: 0 0 6px; font-size: 18px; }
-  dialog .pick { font-family: "Playfair Display", serif; font-size: 46px; color: var(--gold); margin: 6px 0 4px; }
+  dialog { border: 0; border-radius: 16px; padding: 26px 20px 20px; width: min(92vw, 380px); background: var(--bg); color: var(--ink); text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,.2); }
+  dialog::backdrop { background: rgba(51,51,51,.45); }
+  dialog h3 { margin: 0 0 4px; font-size: 17px; font-weight: 700; }
+  dialog .pick { font-size: 48px; font-weight: 900; color: var(--red); margin: 4px 0 2px; }
   dialog p { color: var(--muted); font-size: 14px; margin: 0 0 18px; }
   .row { display: flex; gap: 10px; }
-  .btn.ghost { background: transparent; border: 1.5px solid var(--line); color: var(--ink); }
+  .btn.ghost { background: var(--bg); border: 1.5px solid var(--line); color: var(--ink); }
+  footer { text-align: center; color: var(--muted); font-size: 12px; margin-top: 36px; }
   [hidden] { display: none !important; }
 </style>
 </head>
 <body>
+<div class="top-rule"></div>
 <div class="wrap">
   <header>
-    <img class="logo" src="logo.png" alt="LiNK">
-    <p class="eyebrow">LELP Graduation</p>
-    <h1>Best Dresser <em>Pair</em></h1>
+    <img class="logo" src="logo.svg" alt="Liberty in North Korea">
+    <p class="eyebrow">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3 1 8.5 12 14l9-4.5V16h2V8.5L12 3Zm-6 9.2V16c0 1.7 2.7 3.5 6 3.5s6-1.8 6-3.5v-3.8L12 15.2 6 12.2Z"/></svg>
+      LELP Graduation Ceremony
+    </p>
+    <h1>Best Dresser <span class="accent">Award</span></h1>
+    <div class="divider" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5l2.6 6.1 6.6.5-5 4.3 1.6 6.4L12 16.4l-5.8 3.4 1.6-6.4-5-4.3 6.6-.5z"/></svg></div>
   </header>
 
   <!-- loading / waiting -->
@@ -87,25 +105,27 @@
 
   <!-- voting -->
   <section id="v-vote" hidden>
-    <p class="sub" style="text-align:center">Tap the number of the pair you think dressed best, then submit. You can vote once.</p>
+    <p class="intro">Which pair dressed best tonight?<br>Tap their number and submit. You can vote once.</p>
     <div class="grid" id="grid" role="group" aria-label="Pair numbers"></div>
     <p class="err" id="err"></p>
   </section>
 
   <!-- voted -->
   <section class="panel" id="v-done" hidden>
-    <div class="big">✨</div>
+    <div class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
     <h2>Thanks for voting!</h2>
-    <p>Your vote is in. Keep your eyes on the main screen — the winner will be revealed when voting closes.</p>
+    <p>Your vote is in. Keep your eyes on the main screen. The winner will be announced when voting closes.</p>
     <span class="chip" id="done-num"></span>
   </section>
 
   <!-- closed -->
   <section class="panel" id="v-closed" hidden>
-    <div class="big">🏆</div>
+    <div class="badge"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 3h10v2h3v3a4 4 0 0 1-4 4h-.3A5 5 0 0 1 13 14.9V18h3v3H8v-3h3v-3.1A5 5 0 0 1 8.3 12H8a4 4 0 0 1-4-4V5h3V3Zm-1 4v1a2 2 0 0 0 2 2V7H6Zm12 0h-2v3a2 2 0 0 0 2-2V7Z"/></svg></div>
     <h2>Voting is closed</h2>
-    <p>Look up at the main screen for the big reveal!</p>
+    <p>Look up at the main screen for the big announcement!</p>
   </section>
+
+  <footer>LiNK English Language Program</footer>
 </div>
 
 <div class="bar" id="bar" hidden>
@@ -157,7 +177,9 @@
     for (let n = state.min; n <= state.max; n++) {
       const b = document.createElement("button");
       b.className = "num";
-      b.textContent = n;
+      b.dataset.n = n;
+      b.innerHTML = `<small>Pair</small>${n}`;
+      b.setAttribute("aria-label", "Pair " + n);
       b.setAttribute("aria-pressed", "false");
       b.onclick = () => select(n);
       g.appendChild(b);
@@ -169,7 +191,7 @@
 
   function select(n) {
     selected = n;
-    [...$("grid").children].forEach((b) => b.setAttribute("aria-pressed", String(Number(b.textContent) === n)));
+    [...$("grid").children].forEach((b) => b.setAttribute("aria-pressed", String(Number(b.dataset.n) === n)));
     $("err").textContent = "";
     updateSubmit();
   }
@@ -183,7 +205,6 @@
   function render() {
     if (!state || state.status === "idle") return wait("Voting hasn't started yet", "This page will update automatically once voting opens.");
     if (state.status === "closed") return show("v-closed");
-    // open
     const mine = store.get("bd-voted-" + state.sid);
     if (mine) { $("done-num").textContent = mine === "✓" ? "Vote recorded" : "Pair #" + mine; return show("v-done"); }
     if (builtFor !== state.sid) buildGrid();
