@@ -82,7 +82,8 @@ async function voteCount(sid) {
 function publicState(st, extra = {}) {
   if (!st) return { status: "idle", ...extra };
   const out = { status: st.status, sid: st.sid, min: st.min, max: st.max, ...extra };
-  if (st.status === "closed") out.result = { winners: st.result.winners }; // only the winner(s), never counts
+  // only the winner(s) and their vote count; never the full tally
+  if (st.status === "closed") out.result = { winners: st.result.winners, votes: st.result.votes, total: st.result.total };
   return out;
 }
 

@@ -112,6 +112,9 @@
   .pair-label { font-weight: 700; letter-spacing: .3em; text-transform: uppercase; color: var(--ink-soft); font-size: clamp(14px, 1.6vw, 24px); }
   .winner { font-weight: 900; color: var(--red); line-height: .95; font-size: min(24vh, 22vw); font-variant-numeric: tabular-nums; letter-spacing: -.03em; }
   .winner.multi { font-size: min(12vh, 11vw); line-height: 1.1; letter-spacing: 0; }
+  .vote-count { display: inline-flex; align-items: baseline; gap: .35em; margin-top: -1vh; padding: .35em 1.1em; border-radius: 999px; background: var(--red-tint); color: var(--red-dark); font-weight: 700; font-size: clamp(16px, 1.9vw, 30px); animation: fadeUp .8s .7s both; }
+  .vote-count b { font-weight: 900; font-size: 1.35em; font-variant-numeric: tabular-nums; }
+  .vote-count span { color: var(--ink-soft); font-weight: 500; font-size: .75em; }
   .congrats { margin-top: 1.5vh; font-size: clamp(20px, 2.4vw, 38px); font-weight: 800; animation: fadeUp .8s .9s both; }
   .congrats small { display: block; font-size: .5em; font-weight: 500; color: var(--ink-soft); margin-top: .5em; letter-spacing: .02em; }
   @keyframes pop { from { transform: scale(.3); opacity: 0; } to { transform: scale(1); opacity: 1; } }
@@ -200,6 +203,7 @@
         <div class="winner" id="winner"></div>
       </div>
     </div>
+    <div class="vote-count" id="vote-count" hidden></div>
     <div class="congrats" id="congrats"></div>
   </div>
   <div class="controls">
@@ -428,8 +432,15 @@
       box.textContent = w.map((n) => "#" + n).join(" & ");
       $("congrats").innerHTML = "Congratulations to all winners!<small>Best Dressed Pairs · LELP Graduation Ceremony</small>";
     }
+    const vc = $("vote-count");
+    if (w.length && typeof result.votes === "number") {
+      const each = w.length > 1 ? " each" : "";
+      const total = typeof result.total === "number" ? `<span>· out of ${result.total}</span>` : "";
+      vc.innerHTML = `<b>${result.votes}</b> vote${result.votes === 1 ? "" : "s"}${each} ${total}`;
+      vc.hidden = false;
+    } else vc.hidden = true;
     buildWreath();
-    $("s-reveal").querySelectorAll(".reveal-logo,.ribbon,.wreath-text,.congrats").forEach((el) => { el.style.animation = "none"; el.offsetHeight; el.style.animation = ""; });
+    $("s-reveal").querySelectorAll(".reveal-logo,.ribbon,.wreath-text,.vote-count,.congrats").forEach((el) => { el.style.animation = "none"; el.offsetHeight; el.style.animation = ""; });
     show("s-reveal");
     if (w.length) confetti(celebrate ? 9000 : 4000);
   }
